@@ -1,15 +1,20 @@
-const xlsx = require("xlsx");
-const mysql = require("mysql2/promise");
-const path = require("path");
-require('dotenv').config();
+import xlsx from "xlsx";
+import mysql from "mysql2/promise";
+import path from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+dotenv.config();
 
-async function uploadExcel() {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export async function uploadExcel() {
   const workbook = xlsx.readFile(path.join(__dirname, "tool_set.xlsx"));
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   const json = xlsx.utils.sheet_to_json(sheet, { header: 1 });
 
-  const names = json.slice(3); // 4th row is data
-  const themes = json[0].slice(1); // first row is theme, skip first column
+  const names = json.slice(3);
+  const themes = json[0].slice(1);
   const subthemes = json[1].slice(1);
   const categories = json[2].slice(1);
 
@@ -29,7 +34,6 @@ async function uploadExcel() {
     }
   }
 
-  // connection with mysql
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -39,14 +43,8 @@ async function uploadExcel() {
       rejectUnauthorized: false
     }
   });
-  
 
-  // delete table
-  await connection.execute(
-    "DROP TABLE IF EXISTS names;"
-  );
-
-  // create table
+  await connection.execute("DROP TABLE IF EXISTS names;");
   await connection.execute(`
     CREATE TABLE IF NOT EXISTS names (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -57,7 +55,6 @@ async function uploadExcel() {
     )
   `);
 
-  // insert info
   for (let entry of entries) {
     await connection.execute(
       "INSERT INTO names (name, theme, subtheme, category) VALUES (?, ?, ?, ?)",
@@ -68,5 +65,3 @@ async function uploadExcel() {
   console.log("Data Uploaded to MySQL！");
   await connection.end();
 }
-
-module.exports = uploadExcel

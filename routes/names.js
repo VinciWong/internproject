@@ -1,23 +1,23 @@
-/* This is the code showing database*/
-const express = require('express');
-const router = express.Router();
-require('dotenv').config();
-const mysql = require('mysql2/promise');
+import express from 'express';
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+dotenv.config();
 
-/* This is the login information of database*/
-const connection = await mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    ssl: {
-      rejectUnauthorized: false
-    }
+const router = express.Router();
+
+// create connection pool
+const pool = await mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
-/* These are the queries for getting random name through searching */
-/* First choose the theme, then choose subtheme, then choose categories */
-/* Then the system will give you a name randomly */ 
 router.get('/themes', async (req, res) => {
   const [rows] = await pool.query('SELECT DISTINCT theme FROM names');
   res.json(rows);
@@ -63,6 +63,4 @@ router.post('/save', async (req, res) => {
   }
 });
 
-
-
-module.exports = router;
+export default router;
