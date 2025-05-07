@@ -14,14 +14,16 @@ app.use('/api/names', namesRouter);
 
 uploadExcel()
   .then(() => {
-    app.listen(3001, () => {
-      console.log('Backend running at http://localhost:3001');
-    });
+    console.log('Excel upload successful.');
   })
   .catch((err) => {
-    console.error('Failed to upload Excel:', err);
-    process.exit(1); // stop server if upload fails
+    console.error('Excel upload failed:', err.message);
+    // Don't exit the process, just log the error
   });
+
+app.listen(3001, () => {
+  console.log('Backend running at http://localhost:3001');
+});
 
 
 
