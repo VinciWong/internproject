@@ -30,10 +30,13 @@ async function uploadExcel() {
 
   // connection with mysql
   const connection = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "V1nc112?", 
-    database: "interndb",
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    ssl: {
+      rejectUnauthorized: true
+    }
   });
 
   // delete table
