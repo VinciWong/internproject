@@ -1,18 +1,16 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const uploadExcel = require("./upload");
-const namesRouter = require('./routes/names');
-const authRouter = require('./auth');
+import express from 'express';
+import cors from 'cors';
+import namesRouter from './routes/names.js';
+import authRouter from './auth.js';
+import uploadExcel from './upload.js';
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
 app.use('/api/names', namesRouter);
 app.use('/api/auth', authRouter);
 
-// Upload Excel on server start
 uploadExcel()
   .then(() => {
     console.log('Excel upload successful.');

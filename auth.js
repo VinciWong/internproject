@@ -1,5 +1,4 @@
-/* This is the code for login portal*/
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 router.post('/login', (req, res) => {
@@ -11,4 +10,5 @@ router.post('/login', (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
+
