@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import namesRouter from './routes/names.js';
 import authRouter from './auth.js';
-import uploadExcel from './upload.js';
+import { uploadExcel } from './upload.js';
 
 const app = express();
 app.use(cors());
