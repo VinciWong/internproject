@@ -1,6 +1,7 @@
 const xlsx = require("xlsx");
 const mysql = require("mysql2/promise");
 const path = require("path");
+require('dotenv').config();
 
 async function uploadExcel() {
   const workbook = xlsx.readFile(path.join(__dirname, "tool_set.xlsx"));
@@ -34,7 +35,11 @@ async function uploadExcel() {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    ssl: {
+      rejectUnauthorized: false
+    }
   });
+  
 
   // delete table
   await connection.execute(

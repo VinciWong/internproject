@@ -1,14 +1,18 @@
 /* This is the code showing database*/
 const express = require('express');
 const router = express.Router();
+require('dotenv').config();
 const mysql = require('mysql2/promise');
 
 /* This is the login information of database*/
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+const connection = await mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    ssl: {
+      rejectUnauthorized: false
+    }
 });
 
 /* These are the queries for getting random name through searching */
