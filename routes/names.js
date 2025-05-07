@@ -5,10 +5,10 @@ const mysql = require('mysql2/promise');
 
 /* This is the login information of database*/
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'V1nc112?',
-  database: 'interndb'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 /* These are the queries for getting random name through searching */
