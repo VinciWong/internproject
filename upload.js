@@ -34,14 +34,11 @@ async function uploadExcel() {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    ssl: {
-      rejectUnauthorized: true
-    }
   });
 
   // delete table
   await connection.execute(
-    "DROP TABLE names;"
+    "DROP TABLE IF EXISTS names;"
   );
 
   // create table
